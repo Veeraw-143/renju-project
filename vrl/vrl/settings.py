@@ -16,9 +16,10 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR2=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-TEMPLATES_DIRS=os.path.join(BASE_DIR2,'templates')
-STATIC_DIR=os.path.join(BASE_DIR2, 'static')
-MEDIA_DIR=os.path.join(BASE_DIR2, 'media')
+# Point to the workspace-level templates/static/media (one level above the project dir)
+TEMPLATES_DIRS = os.path.abspath(os.path.join(BASE_DIR2, '..', 'templates'))
+STATIC_DIR = os.path.abspath(os.path.join(BASE_DIR2, '..', 'static'))
+MEDIA_DIR = os.path.abspath(os.path.join(BASE_DIR2, '..', 'media'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -59,12 +60,17 @@ ROOT_URLCONF = 'vrl.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIRS],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
@@ -119,7 +125,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS=[STATIC_DIRS]
-MEDIA_URL='media/'
-MEDIA_ROOT=MEDIA_DIR
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [STATIC_DIR]
+MEDIA_URL = '/media/'
+MEDIA_ROOT = MEDIA_DIR
